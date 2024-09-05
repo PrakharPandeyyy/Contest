@@ -1,14 +1,7 @@
-import axios from "axios";
+
 
 function App() {
   const handleClick = async () => {
-    
-    
-    // await axios.get("http://localhost:3000/auth/google").then((res) => {
-    //   console.log(res.data);
-    // }).catch((err) => {
-    //   console.log(err);
-    // });
     window.location.href = 'http://localhost:3000/auth/google';
     
     
