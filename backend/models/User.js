@@ -4,10 +4,6 @@ const bcrypt = require('bcrypt')
 
 // User Schema (logged in through manual login/signup.)
 const UserSchema = new mongoose.Schema({
-    _id: {
-        required:true,
-        unique:true
-    },
     name: {
         type: String,
         required:true,
@@ -15,21 +11,17 @@ const UserSchema = new mongoose.Schema({
     password:{ 
         required:true,
         type : String,
-        unique:true,
         trim:true,
         validate(value) {
-            if(value.length()<8) {
+            if(value.length<8) {
                 throw new error('Password must be greater than 8')
             }
-            if(value.toLowerCase.includes('password')){
-                throw new error ('Password shall not be password')
-            } 
         }
     },
     email: {
         required:true,
+        unique:true,
         type:String,
-
         trim:true,
         validate(value) {
             if(!validator.isEmail(value)) {
@@ -39,6 +31,16 @@ const UserSchema = new mongoose.Schema({
     }
 },{timestamps:true})
 
+UserSchema.pre('save',async function(next){
+    const user= this ;
+    user.password = await bcrypt.hash(user.password,8)
+    next();
+})
+
+// UserSchema.statics.findByCredentials = async (email,password)=>{
+//     const user = await User.findOne(email);
+//     if(!user)
+// }
 
 
 
